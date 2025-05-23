@@ -1,80 +1,76 @@
-import React from "react";
-import "../assets/css/style.css";
+"use client";
+import React, { useState } from "react";
+import style from "../assets/css/style.js";
 import { Box } from "@mui/material";
 import Image from "next/image";
-import hero2 from "../assets/images/hero2.jpg";
 import Button from "./Button";
+import hero2 from "../assets/images/hero2.jpg";
+import hero3 from "../assets/images/hero3.jpg";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 
 const Hero = () => {
+  // hero image change
+  const [index, setIndex] = useState(0);
+
+  // go to next image
+  const nextImage = () => {
+    setIndex((prevIndex) => (prevIndex + 1) % heroImages.length);
+  };
+
+  // go to previous image
+  const prevImage = () => {
+    setIndex((prevIndex) =>
+      prevIndex === 0 ? heroImages.length - 1 : prevIndex - 1
+    );
+  };
+
   return (
-    <Box sx={{ position: "relative" }}>
-      <Image src={hero2} alt="hero2" style={{ width: "100%" }} />
-      <Box
-        sx={{
-          position: "absolute",
-          top: "30%",
-          textAlign: "center",
-          fontSize: "90px",
-          fontWeight: 400,
-          lineHeight: "108px",
-          color: "#fff",
-        }}
-      >
-        THE WITCHER 3 BETTLE BEGAN’S HERE
-      </Box>
-      {/* Button component */}
-      <Box
-        sx={{
-          position: "absolute",
-          top: "60%",
-          left: "45%",
-          textAlign: "center",
-        }}
-      >
-        <Button />
-        {/* prev/next arrow */}
-        <Box
-          sx={{
-            position: "relative",
-            top: "20px",
-            display: "flex",
-            justifyContent: "center",
-            gap: "30px",
-            margin: "0 auto",
-            color: "#989FA1",
-            fontSize: "20px",
-          }}
-        >
-          <Box>
-            Next
-            <ArrowRightAltIcon
-              sx={{
-                position: "absolute",
-                right: "-8px",
-                top: "-3px",
-                fontSize: "30px",
-                color: "#989FA1",
-              }}
-            />
-          </Box>
-          <Box>
-            <KeyboardBackspaceIcon
-              sx={{
-                position: "absolute",
-                left: "-8px",
-                top: "-3px",
-                fontSize: "30px",
-                color: "#989FA1",
-              }}
-            />
-            Pre
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+    <>
+      {heroImages.map(
+        (item, i) =>
+          index === i && (
+            <Box sx={style.hero} key={i} position="relative">
+              <Image
+                src={item.image}
+                alt={item.title}
+                fill
+                style={style.heroimg}
+              />
+              <Box sx={style.heroText}>{item.text}</Box>
+
+              {/* Button prev/nex */}
+              <Box sx={style.heroButton}>
+                <Button />
+                <Box sx={style.btnbox}>
+                  <Box onClick={nextImage} sx={style.heroArrowBox}>
+                    <KeyboardBackspaceIcon sx={style.heroNexIcon} />
+                    Prev
+                  </Box>
+                  <Box onClick={prevImage} sx={style.heroArrowBox}>
+                    <ArrowRightAltIcon sx={style.heroPrevIcon} />
+                    Next
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+          )
+      )}
+    </>
   );
 };
 
 export default Hero;
+
+const heroImages = [
+  {
+    title: "THE WITCHER 3",
+    text: "BETTLE BEGAN’S HERE",
+    image: hero2, // image url
+  },
+  {
+    title: "THE WITCHER 3",
+    text: "BETTLE BEGAN’S HERE",
+    image: hero3, // image url
+  },
+];
